@@ -1,0 +1,13 @@
+﻿<?xml version="1.0"?>
+<DeployInfo>
+	<FileFolder>
+		<Name>Marking Eplan settings</Name>
+		<Source>\\vsm-fs-svr03\data\Clip Project Marking\Deploy data\P8Addin\P8Installations\2.9.4\settings.xml</Source>
+		<Target>C:\Users\%username%\AppData\Local\Phoenix Contact\CLIP PROJECT - marking\P8Addin\P8Installations\2.9.4\settings.xml</Target>
+	</FileFolder>
+	<FileFolder>
+		<Name>Marking location settings</Name>
+		<Source>\\vsm-fs-svr03\data\Clip Project Marking\Deploy data\DataLocationSettings.xml</Source>
+		<Target>C:\Users\%username%\AppData\Local\Phoenix Contact\CLIP PROJECT - marking\DataLocationSettings.xml</Target>
+	</FileFolder>
+</DeployInfo>

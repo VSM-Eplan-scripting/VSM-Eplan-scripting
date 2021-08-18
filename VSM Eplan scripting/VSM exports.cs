@@ -1,12 +1,4 @@
-﻿//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-//Wijzigingenbeheer
-//8-2-2021 MDP	Div exports gemaakt voor Eplan export menu
-//23-2-2021 MDP Update BOM export
-//8-3-2021 MDP XEdaExportAction /SmartWiringExport:1  toevoegd ivm upgrade 2.9
-//3-5-2021 MDP	Import gemaakt om Modelviews te importeren
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-using System;
+﻿using System;
 using System.IO;
 using System.Diagnostics;
 using System.Windows.Forms;
@@ -77,8 +69,27 @@ public class Voortman_functions
 			acc.AddParameter("TEXTHEIGHT", TextHeight);
 
 			cli.Execute("changeLayer", acc);
+		}
 
-			MessageBox.Show("Layer " + LayerName + " updated with fontsize " + TextHeight, "Update layer", MessageBoxButtons.OK);
+	}
+
+	public void VSM_UpdateLayerColor(string LayerName, string Color)
+	{
+		//-5 = inverse to background
+
+		if (LayerName == "" || Color == "")
+		{
+			return;
+		}
+		else
+		{
+			CommandLineInterpreter cli = new CommandLineInterpreter();
+			ActionCallingContext acc = new ActionCallingContext();
+
+			acc.AddParameter("LAYER", LayerName);
+			acc.AddParameter("COLORID", Color);
+
+			cli.Execute("changeLayer", acc);
 		}
 
 	}
@@ -98,11 +109,11 @@ public class Voortman_functions
 			if (File.Exists(SettingsLocation))
 			{
 				new CommandLineInterpreter().Execute("XSettingsImport", ReadXMLFile);
-				MessageBox.Show("Setting '" + SettingsLocation + "' is imported.", "WriteSettings", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("Setting '" + SettingsLocation + "' is imported.", "Write settings", MessageBoxButtons.OK, MessageBoxIcon.Information);
 			}
 			else
 			{
-				MessageBox.Show("Setting file '" + SettingsLocation + "' does not exist.", "WriteSettings", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show("Setting file '" + SettingsLocation + "' does not exist.", "Write settings", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
 		else
@@ -127,12 +138,12 @@ public class Voortman_functions
 				new CommandLineInterpreter().Execute("XSettingsImport", ReadXMLFile);
 				if (Feedback)
 				{
-					MessageBox.Show("Setting '" + SettingsLocation + "' is imported.", "WriteSettings", MessageBoxButtons.OK, MessageBoxIcon.Information);
+					MessageBox.Show("Setting '" + SettingsLocation + "' is imported.", "Write settings", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				}
 			}
 			else
 			{
-				MessageBox.Show("Setting file '" + SettingsLocation + "' does not exist.", "WriteSettings", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show("Setting file '" + SettingsLocation + "' does not exist.", "Write settings", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
 		else
@@ -140,7 +151,6 @@ public class Voortman_functions
 			return;
 		}
 	}
-
 
 	public string VSM_GetSelectedProject()
 	{
@@ -213,7 +223,7 @@ public class Voortman_functions
 		{
 			progress.BeginPart(100, "Export BOM");
 			ActionCallingContext labelingContext = new ActionCallingContext();
-			labelingContext.AddParameter("CONFIGSCHEME", "VSM cabinet parts list with bimmer");
+			labelingContext.AddParameter("CONFIGSCHEME", "VSM parts list with bimmer");
 			labelingContext.AddParameter("LANGUAGE", "en_US");
 			labelingContext.AddParameter("LogMsgActionDone", "true");
 			labelingContext.AddParameter("SHOWOUTPUT", "1");
@@ -244,7 +254,6 @@ public class Voortman_functions
 		}
 		progress.EndPart(true);
 	}
-
 
 	[DeclareAction("VSM_ExportPDF")]
 	public void VSM_ExportPDF()
@@ -422,26 +431,44 @@ public class Voortman_functions
 		}
 	}
 
-	[DeclareAction("VSM_UpdateLayer583")]
-	public void VSM_UpdateLayer583()
-	{
-		VSM_UpdateLayerTextHeight("EPLAN583", "5");
-	}
+	//[DeclareAction("VSM_UpdateLayer583")]
+	//public void VSM_UpdateLayer583()
+	//{
+	//	string LayerName = "EPLAN583";
+	//	string TextHeight = "5";
+	//	string Color = "-5";
 
-	[DeclareAction("VSM_ImportModelViewReports")]
-	public void VSM_ImportModelViewReports()
-	{
-		string SelectedProject = VSM_GetSelectedProject();
+	//	VSM_UpdateLayerTextHeight(LayerName, TextHeight);
+	//	VSM_UpdateLayerColor(LayerName, Color);
+	//	MessageBox.Show("Layer " + LayerName + " updated with fontsize " + TextHeight + " and color " + Color, "Update layer", MessageBoxButtons.OK);
+	//}
 
-		if (!(SelectedProject == string.Empty))
-		{
-			//Import Model views
-			VSM_ImportProjectSettings(SelectedProject, @"\\vsm-fs-svr03\Data\Eplan Electric P8\Gegevens\Schemes\VAR\Model views\VSM all model view templates.xml");
+	//[DeclareAction("VSM_ImportModelViewReports")]
+	//public void VSM_ImportModelViewReports()
+	//{
+	//	string SelectedProject = VSM_GetSelectedProject();
 
-			//Import filter for model views
-			VSM_ImportProjectSettings(SelectedProject, @"\\vsm-fs-svr03\Data\Eplan Electric P8\Gegevens\Schemes\VAR\Model views\G3vl.VSM_w_o_mounting_rail.xml");
-		}
-	}
+	//	if (!(SelectedProject == string.Empty))
+	//	{
+	//		//Import Model views
+	//		VSM_ImportProjectSettings(SelectedProject, @"\\vsm-fs-svr03\Data\Eplan Electric P8\Gegevens\Schemes\VAR\Model views\VSM all model view templates.xml");
+
+	//		//Import filter for model views
+	//		VSM_ImportProjectSettings(SelectedProject, @"\\vsm-fs-svr03\Data\Eplan Electric P8\Gegevens\Schemes\VAR\Model views\G3vl.VSM_w_o_mounting_rail.xml");
+	//	}
+	//}
+
+	//[DeclareAction("VSM_ImportTranslationSettings")]
+	//public void VSM_ImportTranslationSettings()
+	//{
+	//	string SelectedProject = VSM_GetSelectedProject();
+
+	//	if (!(SelectedProject == string.Empty))
+	//	{
+	//		//Import translation settings
+	//		VSM_ImportProjectSettings(SelectedProject, @"\\vsm-fs-svr03\Data\Eplan Electric P8\Gegevens\Xml\VAR\Vertaling\Projects+Basis project Voortman IEC structuur+Translation.xml");
+	//	}
+	//}
 
 	[DeclareAction("VSM_ImportProjectsFilter")]
 	public void VSM_ImportProjectsFilter()
@@ -547,5 +574,34 @@ public class Voortman_functions
 		//string value = oSettings.GetStringSetting("USER.Labelling.Config.VOORTMAN artikellijst veld Projectspecifiek.Data.SortFilter.FilterSchemeData", 0);
 		//MessageBox.Show("Value of Index " + 1 + ":\n" + value, "USER.Labelling.Config.VOORTMAN artikellijst veld Projectspecifiek.Data.SortFilter.FilterSchemeData");
 	}
+
+	[DeclareAction("VSM_ExportBOMOnStructure")]
+	public void VSM_ExportBOMOnStructure()
+	{
+		Eplan.EplApi.Base.Settings oSettings = new Eplan.EplApi.Base.Settings();
+		oSettings.SetStringSetting("USER.Labelling.Config.VSM parts list with bimmer.Data.SortFilter.FilterSchemeData", "0|1|1|EPLAN.PartRef.UserSupplementaryField4;0|0|VA|0|1|1|0|0|0;0|#7|1|0|;0|0||0|1|1|0|0|0|#0|1|1|EPLAN.PartRef.UserSupplementaryField5;0|0|??_??@NB;|0|1|1|0|0|0;0|#7|1|0|;0|0||0|1|1|0|0|0|#0|1|1|19007;0|0|*EEC*|0|1|1|0|0|0;0|", 0);
+		oSettings.SetStringSetting("USER.Labelling.Config.VSM parts list with bimmer.Data.SortFilter.FilterSchemeName", "Filter _NB, _VA,_*EEC*", 0);
+		VSM_ExportBOM();
+	}
+
+	[DeclareAction("VSM_ExportBOMOnExt_Field")]
+	public void VSM_ExportBOMOnExt_Field()
+	{
+		Eplan.EplApi.Base.Settings oSettings = new Eplan.EplApi.Base.Settings();
+		oSettings.SetStringSetting("USER.Labelling.Config.VSM parts list with bimmer.Data.SortFilter.FilterSchemeData", "0|1|1|EPLAN.PartRef.UserSupplementaryField5;0|0|??_??@NB;|0|1|1|0|0|0;0|#7|1|0|;0|0||0|1|1|0|0|0;0|#0|1|0|22041;0|0|29|0|1|1|0|0|0;0|#3|1|0|;0|0||0|1|1|0|0|0;0|#0|1|0|22220;0|0|1|0|1|1|0|0|0;0|#7|1|0|;0|0||0|1|1|0|0|0;0|#0|1|1|20494;0|0|1|0|1|1|0|0|0;0|#3|1|0|;0|0||0|1|1|0|0|0;0|#0|1|0|22220;0|0|1|0|1|1|0|0|0;0|#7|1|0|;0|0||0|1|1|0|0|0;0|#0|1|1|20450;0|3|1|0|1|1|0|0|0;0|#7|1|0|;0|0||0|1|1|0|0|0;0|#0|1|1|20024;0|0|nl_NL@Montageplaat;|0|1|1|0|0|0;0|#7|1|0|;0|0||0|1|1|0|0|0;0|#0|1|1|EPLAN.PartRef.UserSupplementaryField4;0|0|nl_NL@VA;|0|1|1|0|0|0;0|", 0);
+		oSettings.SetStringSetting("USER.Labelling.Config.VSM parts list with bimmer.Data.SortFilter.FilterSchemeName", "Filter parts field", 0);
+		VSM_ExportBOM();
+	}
+
+	[DeclareAction("VSM_ExportBOMOnExt_Panel")]
+	public void VSM_ExportBOMOnExt_Panel()
+	{
+		Eplan.EplApi.Base.Settings oSettings = new Eplan.EplApi.Base.Settings();
+		oSettings.SetStringSetting("USER.Labelling.Config.VSM parts list with bimmer.Data.SortFilter.FilterSchemeData", "0|1|0|20484;0|0|0|0|1|1|0|0|0;0|#7|1|0|0;0|0||0|1|1|0|0|0;0|#0|1|1|20494;0|0|1|0|1|1|0|0|0;0|#7|1|0|0;0|0||0|1|1|0|0|0;0|#0|1|1|40305;0|0|NB|0|1|1|0|0|0;0|#7|1|0|0;0|0||0|1|1|0|0|0;0|#0|1|1|20121;0|0|-6|0|1|1|0|0|0;0|#7|1|0|0;0|0||0|1|1|0|0|0;0|#0|1|1|22220;0|0|1|0|1|1|0|0|0;0|", 0);
+		oSettings.SetStringSetting("USER.Labelling.Config.VSM parts list with bimmer.Data.SortFilter.FilterSchemeName", "Filter parts cabinet", 0);
+		VSM_ExportBOM();
+	}
+
+
 }
 

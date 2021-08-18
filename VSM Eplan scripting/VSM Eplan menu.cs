@@ -1,22 +1,8 @@
-﻿//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-//Wijzigingenbeheer
-//8-2-2021 MDP	Div exports gemaakt voor Eplan export menu
-//23-2-2021 MDP Update BOM export
-//25-3-2021 MDP Open Projects toegevoegd
-//3-5-2021 MDP	Import gemaakt om Modelviews te importeren
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-using System;
-using System.IO;
-using System.Media;
-using System.Diagnostics;
-using System.Windows.Forms;
-using Eplan.EplApi.Base;
-using Eplan.EplApi.Scripting;
-
+﻿using Eplan.EplApi.Scripting;
 using System.Runtime.InteropServices;
 using System.Text;
-
+using System;
+using System.Windows.Forms;
 public class VSM_Eplan_menu
 {
 	[DeclareMenu]
@@ -39,6 +25,7 @@ public class VSM_Eplan_menu
 		uint menuId6;
 		uint menuId7;
 		uint menuId8;
+		uint menuId9;
 
 		menuId1 = 0;
 		menuId2 = 0;
@@ -48,6 +35,7 @@ public class VSM_Eplan_menu
 		menuId6 = 0;
 		menuId7 = 0;
 		menuId8 = 0;
+		menuId9 = 0;
 
 		//The main menu is generated after the help menu
 		menuId1 = menu.AddMainMenu("Voortman", Eplan.EplApi.Gui.Menu.MainMenuName.eMainMenuHelp, "Elec engineering sharepoint",
@@ -55,20 +43,31 @@ public class VSM_Eplan_menu
 		menuId2 = menuId1;
 		menuId1 = menu.AddPopupMenuItem("Wiring", "Wire size sheet", "StartProcess /ProcessName:https://voortmansteelgroup.sharepoint.com/sites/ElektroEngineering/Engineering%20Documenten%20Bibliotheek/Design%20sheet%20protection%20wire%20size%20NFPA%20IEC%20CEC.pdf /Parameter:",
 		"Open wire size sheet", menuId1, 0, false, false);
-		menuId1 = menu.AddPopupMenuItem("BOM upload", "BOM upload (no filter ext. placement)", "VSM_ExportBOM", "Export BOM with bimmer", menuId2, 0, false, false);
+		menuId1 = menu.AddPopupMenuItem("BOM upload", "BOM upload (+structure/Propanel)", "VSM_ExportBOMOnStructure", "Export BOM with bimmer", menuId2, 0, false, false);
 		menuId3 = menuId1;
 		menuId1 = menu.AddPopupMenuItem("EDR module/assy exports", "Marking MTP file (M/A)", "VSM_MarkingMTP", "Export MTP file", menuId2, 0, false, false);
 		menuId4 = menuId1;
 		menuId1 = menu.AddPopupMenuItem("Open projects", "Modules/assy", "VSM_OpenModules", "Open module projects", menuId2, 0, false, false);
 		menuId5 = menuId1;
-		menuId1 = menu.AddPopupMenuItem("Update Eplan projects", "Update 3D DT layer", "VSM_UpdateLayer583", "Update 3D DT layer", menuId2, 0, false, false);
-		menuId6 = menuId1;
-		menuId1 = menu.AddPopupMenuItem("Update model views", "Import model view reports", "VSM_ImportModelViewReports", "VSM_ImportModelViewReports", menuId6, 0, false, false);
-		menuId7 = menuId1;
+		//menuId1 = menu.AddPopupMenuItem("Update Eplan projects", "Update 3D DT layer", "VSM_UpdateLayer583", "Update 3D DT layer", menuId2, 0, false, false);
+		//menuId6 = menuId1;
+		//menuId1 = menu.AddPopupMenuItem("Update model views", "Import model view reports", "VSM_ImportModelViewReports", "VSM_ImportModelViewReports", menuId6, 0, false, false);
+		//menuId7 = menuId1;
 		menuId1 = menu.AddPopupMenuItem("For Projects", "Set 'Order project specific' filter", "VSM_ImportProjectsFilter", "Set 'Order project specific' filter", menuId2, 0, false, false);
 		menuId8 = menuId1;
 
+		if(Environment.UserName == "m.pluimers" | Environment.UserName == "r.vandenberg")
+		{
+			menuId1 = menu.AddPopupMenuItem("Eplan management", "Release basic project", "VSM_ReleaseBasicProject", "Release basic project", menuId2, 0, false, false);
+			menuId9 = menuId1;
+		}
 
+		// Menu Update Eplan projects
+		//menuId1 = menu.AddMenuItem("Update translation settings", "VSM_ImportTranslationSettings", "Import translation settings", menuId6, 0, false, false);
+
+		// Menu BOM upload
+		menuId1 = menu.AddMenuItem("BOM upload (ext placement/field)", "VSM_ExportBOMOnExt_Field", "Export all deliverables", menuId3, 0, false, false);
+		menuId1 = menu.AddMenuItem("BOM upload (int placement/panel)", "VSM_ExportBOMOnExt_Panel", "Export all deliverables", menuId3, 0, false, false);
 
 		//	EDR Module assy menu
 		menuId1 = menu.AddMenuItem("Modules export all", "VSM_ExportAllModule", "Export all deliverables", menuId4, 0, false, false);
@@ -89,42 +88,52 @@ public class VSM_Eplan_menu
 
 	}
 
-	[DeclareMenu]
-	public void PolkaMenu()
-	{
-		Eplan.EplApi.Gui.Menu menu = new Eplan.EplApi.Gui.Menu();
-		uint menuId1;
-		menuId1 = menu.AddMenuItem("Play Polka musik", "EPLAN_PlayPolka", "Play Polka musik", 35571, 1, false, false);
-	}
+	//[DeclareMenu]
+	//public void PolkaMenu()
+	//{
+	//	Eplan.EplApi.Gui.Menu menu = new Eplan.EplApi.Gui.Menu();
+	//	uint menuId1;
+	//	menuId1 = menu.AddMenuItem("Play Polka musik", "EPLAN_PlayPolka", "Play Polka musik", 35571, 1, false, false);
+	//}
 
-	[DeclareAction("EPLAN_PlayPolka")]
-	public void EPLAN_PlayPolka()
-	{
-		Player mp3player = new Player();
-		mp3player.Open(@"\\vsm-fs-svr03\data\Eplan Electric P8\Gegevens\Scripts\VAR\Special\Polka.mp3");
-		mp3player.Play();
-	}
+	//[DeclareAction("EPLAN_PlayPolka")]
+	//public void EPLAN_PlayPolka()
+	//{
+	//	Player mp3player = new Player();
+	//	mp3player.Open(@"\\vsm-fs-svr03\data\Eplan Electric P8\Gegevens\Scripts\VAR\Special\Polka.mp3");
+	//	mp3player.Play();
+	//}
 
 
 }
 
-public class Player
+//public class Player
+//{
+//	//To import the dll winmn.dll which allows to play mp3 files
+//	[DllImport("winmm.dll")]
+//	private static extern long mciSendString(string lpstrCommand, StringBuilder lpstrReturnString, int uReturnLength, int hwndCallback);
+
+
+
+//	public void Open(string file)
+//	{
+//		string command = "open \"" + file + "\" type MPEGVideo alias Music";
+//		mciSendString(command, null, 0, 0);
+//	}
+
+//	public void Play()
+//	{
+//		string command = "play Music";
+//		mciSendString(command, null, 0, 0);
+//	}
+//}
+
+public class MyEventHandler
 {
-	//To import the dll winmn.dll which allows to play mp3 files
-	[DllImport("winmm.dll")]
-	private static extern long mciSendString(string lpstrCommand, StringBuilder lpstrReturnString, int uReturnLength, int hwndCallback);
-
-
-
-	public void Open(string file)
+	[DeclareEventHandler("onActionStart.String.XPamAutoCreateFunctionTemplate")]
+	public void Action()
 	{
-		string command = "open \"" + file + "\" type MPEGVideo alias Music";
-		mciSendString(command, null, 0, 0);
-	}
-
-	public void Play()
-	{
-		string command = "play Music";
-		mciSendString(command, null, 0, 0);
+		MessageBox.Show("Weet je het zeker dat je dit wilt? Voor gehaktballen bel de Sterkerij 0548 543 859.");
+		return;
 	}
 }

@@ -1,0 +1,55 @@
+<Settings>
+  <CAT name="INSTALL">
+    <MOD name="AF">
+      <Setting name="ApplicationModifier" ver="1" type="string" info="Name modification for specific application configuration">
+        <Default>
+          <Val>Auto roll-out Eplan settings</Val>
+        </Default>
+      </Setting>
+    </MOD>
+  </CAT>
+  <CAT name="STATION">
+    <MOD name="SYSTEM">
+      <LEV1 name="Auto roll-out Eplan settings">
+        <Setting name="XMLPath" ver="1" type="string" info="patched path to install.xml">
+          <Default>
+            <Val>\\vsm-fs-svr03\data\Eplan Electric P8\Gegevens\Auto roll-out Eplan settings\CFG\</Val>
+          </Default>
+        </Setting>
+        <Setting name="Version" ver="1" type="string" info="version nr of this addon">
+          <Default>
+            <Val>1.0.14</Val>
+          </Default>
+        </Setting>
+        <LEV2 name="MainVersion">
+          <LEV3 name="Basic">
+            <Setting name="Licences" ver="1" type="string" info="Licence of Main Product to identify it">
+              <Default>
+                <Val>700</Val>
+              </Default>
+            </Setting>
+            <Setting name="Versions" ver="1" type="string" info="Version of Main Product to identify it">
+              <Default>
+                <Val>2.8.3</Val>
+                <Val>2.9.4</Val>
+              </Default>
+            </Setting>
+          </LEV3>
+          <LEV3 name="ProPanel">
+            <Setting name="Licences" ver="1" type="string" info="Licence of Main Product to identify it">
+              <Default>
+                <Val>565</Val>
+              </Default>
+            </Setting>
+            <Setting name="Versions" ver="1" type="string" info="Version of Main Product to identify it">
+              <Default>
+                <Val>2.8.3</Val>
+                <Val>2.9.4</Val>
+              </Default>
+            </Setting>
+          </LEV3>
+        </LEV2>
+      </LEV1>
+    </MOD>
+  </CAT>
+</Settings>
